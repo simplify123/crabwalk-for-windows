@@ -17,8 +17,27 @@ import {
 } from '~/components/monitor'
 
 export const Route = createFileRoute('/monitor/')({
-  component: MonitorPage,
+  component: MonitorPageWrapper,
 })
+
+// Wrapper to ensure client-only rendering (useLiveQuery needs client)
+function MonitorPageWrapper() {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-950 text-white">
+        <div className="flex items-center gap-3">
+          <Loader2 size={24} className="animate-spin text-cyan-400" />
+          <span className="text-lg">Loading monitor...</span>
+        </div>
+      </div>
+    )
+  }
+
+  return <MonitorPage />
+}
 
 function MonitorPage() {
   const [connected, setConnected] = useState(false)
@@ -160,7 +179,7 @@ function MonitorPage() {
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <div className="w-64 flex-shrink-0">
+        <div className="w-64 flex shrink-0">
           <SessionList
             sessions={sessions}
             selectedKey={selectedSession}

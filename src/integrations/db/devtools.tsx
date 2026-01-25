@@ -1,14 +1,22 @@
+import { useState, useEffect } from 'react'
 import { useLiveQuery } from '@tanstack/react-db'
 import { todosCollection } from '~/lib/demo-db'
 
 export const dbDevtoolsPlugin = {
   name: 'TanStack DB',
-  render: (
+  render: <DbInspectorWrapper />,
+}
+
+function DbInspectorWrapper() {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return <div className="p-4 text-sm text-gray-500">Loading...</div>
+  return (
     <div className="p-4 text-sm">
       <h3 className="font-semibold mb-2">Collections</h3>
       <DbInspector />
     </div>
-  ),
+  )
 }
 
 function DbInspector() {
