@@ -19,9 +19,9 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000/monitor`
+Open `http://localhost:3000/monitor` (or `http://<server-ip>:3000/monitor` for remote access)
 
-Requires clawdbot gateway running on `ws://127.0.0.1:18789`.
+Requires clawdbot gateway running on the same machine.
 
 ## Config
 
