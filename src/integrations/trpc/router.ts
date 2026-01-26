@@ -13,6 +13,10 @@ import {
 // Server-side debug mode state
 let debugMode = false
 
+// Server-side log collection
+let collectLogs = false
+const collectedEvents: Array<{ timestamp: number; event: unknown }> = []
+
 const t = initTRPC.create({
   transformer: superjson,
 })
@@ -66,6 +70,38 @@ const clawdbotRouter = router({
     return { debugMode }
   }),
 
+  // Log collection
+  setLogCollection: publicProcedure
+    .input(z.object({ enabled: z.boolean() }))
+    .mutation(({ input }) => {
+      collectLogs = input.enabled
+      if (input.enabled) {
+        console.log(`[clawdbot] log collection started`)
+      } else {
+        console.log(`[clawdbot] log collection stopped, ${collectedEvents.length} events collected`)
+      }
+      return { collectLogs, eventCount: collectedEvents.length }
+    }),
+
+  getLogCollection: publicProcedure.query(() => {
+    return { collectLogs, eventCount: collectedEvents.length }
+  }),
+
+  downloadLogs: publicProcedure.query(() => {
+    return {
+      events: collectedEvents,
+      count: collectedEvents.length,
+      collectedAt: new Date().toISOString(),
+    }
+  }),
+
+  clearLogs: publicProcedure.mutation(() => {
+    const count = collectedEvents.length
+    collectedEvents.length = 0
+    console.log(`[clawdbot] cleared ${count} collected events`)
+    return { cleared: count }
+  }),
+
   sessions: publicProcedure
     .input(
       z
@@ -103,6 +139,14 @@ const clawdbotRouter = router({
       const client = getClawdbotClient()
 
       const unsubscribe = client.onEvent((event) => {
+        // Collect raw event when log collection is enabled
+        if (collectLogs) {
+          collectedEvents.push({
+            timestamp: Date.now(),
+            event,
+          })
+        }
+
         // Log raw event when debug mode is enabled
         if (debugMode) {
           console.log('\n[DEBUG] Raw event:', JSON.stringify(event, null, 2))

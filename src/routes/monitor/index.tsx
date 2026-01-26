@@ -63,6 +63,8 @@ function MonitorPage() {
   const [error, setError] = useState<string | null>(null)
   const [historicalMode, setHistoricalMode] = useState(false)
   const [debugMode, setDebugMode] = useState(false)
+  const [logCollection, setLogCollection] = useState(false)
+  const [logCount, setLogCount] = useState(0)
   const [selectedSession, setSelectedSession] = useState<string | null>(null)
 
   // Sidebar collapse state - default to collapsed on mobile
@@ -167,6 +169,56 @@ function MonitorPage() {
       console.error('Failed to set debug mode:', e)
     }
   }
+
+  const handleLogCollectionChange = async (enabled: boolean) => {
+    setLogCollection(enabled)
+    try {
+      const result = await trpc.clawdbot.setLogCollection.mutate({ enabled })
+      setLogCount(result.eventCount)
+    } catch (e) {
+      console.error('Failed to set log collection:', e)
+    }
+  }
+
+  const handleDownloadLogs = async () => {
+    try {
+      const result = await trpc.clawdbot.downloadLogs.query()
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `clawdbot-events-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Failed to download logs:', e)
+    }
+  }
+
+  const handleClearLogs = async () => {
+    try {
+      await trpc.clawdbot.clearLogs.mutate()
+      setLogCount(0)
+    } catch (e) {
+      console.error('Failed to clear logs:', e)
+    }
+  }
+
+  // Poll log count while collecting
+  useEffect(() => {
+    if (!logCollection) return
+    const interval = setInterval(async () => {
+      try {
+        const result = await trpc.clawdbot.getLogCollection.query()
+        setLogCount(result.eventCount)
+      } catch {
+        // ignore
+      }
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [logCollection])
 
   const handleToggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => !prev)
@@ -275,8 +327,13 @@ function MonitorPage() {
             connected={connected}
             historicalMode={historicalMode}
             debugMode={debugMode}
+            logCollection={logCollection}
+            logCount={logCount}
             onHistoricalModeChange={handleHistoricalModeChange}
             onDebugModeChange={handleDebugModeChange}
+            onLogCollectionChange={handleLogCollectionChange}
+            onDownloadLogs={handleDownloadLogs}
+            onClearLogs={handleClearLogs}
             onConnect={handleConnect}
             onDisconnect={handleDisconnect}
             onRefresh={handleRefresh}
