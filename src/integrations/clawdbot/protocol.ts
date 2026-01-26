@@ -147,7 +147,7 @@ export function createConnectParams(token?: string): ConnectParams {
     minProtocol: 3,
     maxProtocol: 3,
     client: {
-      id: 'crabwalk-monitor',
+      id: 'clawdbot',
       displayName: 'Crabwalk Monitor',
       version: '0.1.0',
       platform: 'node',
