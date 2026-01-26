@@ -268,14 +268,14 @@ code, pre {
    RETRO PANELS & CARDS
 ============================================================================= */
 .panel-retro {
-  @apply bg-shell-900 border-2 border-shell-700 rounded-lg;
+  @apply bg-shell-900 rounded-lg;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .panel-crab {
-  @apply bg-linear-to-br from-shell-900 to-shell-950 border-2 border-crab-900/50 rounded-lg;
+  @apply bg-linear-to-br from-shell-900 to-shell-950 rounded-lg;
   box-shadow:
     0 0 30px rgba(239, 68, 68, 0.1),
     0 4px 20px rgba(0, 0, 0, 0.4),

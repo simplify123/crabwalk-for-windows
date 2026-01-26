@@ -39,9 +39,9 @@ export function SettingsPanel({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-2.5 bg-shell-800 hover:bg-shell-700 rounded-lg border-2 border-shell-700 hover:border-shell-600 transition-all group"
+        className="p-2 bg-shell-800 hover:bg-shell-700 rounded-lg transition-all group"
       >
-        <Settings size={16} className="text-gray-400 group-hover:text-crab-400 transition-colors" />
+        <Settings size={14} className="text-gray-400 group-hover:text-crab-400 transition-colors" />
       </button>
 
       <AnimatePresence>
@@ -62,7 +62,7 @@ export function SettingsPanel({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed right-0 top-0 h-full w-80 bg-shell-900 border-l-2 border-shell-700 z-50 p-5 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-80 bg-shell-900 z-50 p-5 overflow-y-auto"
             >
               {/* Texture overlay */}
               <div className="absolute inset-0 texture-scanlines pointer-events-none opacity-30" />
@@ -74,7 +74,7 @@ export function SettingsPanel({
                 </h2>
                 <button
                   onClick={() => setOpen(false)}
-                  className="p-2 hover:bg-shell-800 rounded-lg border border-transparent hover:border-shell-600 transition-all"
+                  className="p-2 hover:bg-shell-800 rounded-lg transition-all"
                 >
                   <X size={18} className="text-gray-400" />
                 </button>
@@ -98,7 +98,7 @@ export function SettingsPanel({
                     {connected ? (
                       <button
                         onClick={onDisconnect}
-                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-crab-600 hover:bg-crab-500 border-2 border-crab-500 rounded-lg transition-all"
+                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-crab-600 hover:bg-crab-500 rounded-lg transition-all"
                         style={{ boxShadow: '0 2px 0 0 #991b1b' }}
                       >
                         Disconnect
@@ -106,7 +106,7 @@ export function SettingsPanel({
                     ) : (
                       <button
                         onClick={onConnect}
-                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-neon-mint/20 hover:bg-neon-mint/30 border-2 border-neon-mint/50 text-neon-mint rounded-lg transition-all"
+                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-neon-mint/20 hover:bg-neon-mint/30 text-neon-mint rounded-lg transition-all"
                       >
                         Connect
                       </button>
@@ -114,7 +114,7 @@ export function SettingsPanel({
                     <button
                       onClick={onRefresh}
                       disabled={!connected}
-                      className="px-3 py-2 bg-shell-800 hover:bg-shell-700 border-2 border-shell-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="px-3 py-2 bg-shell-800 hover:bg-shell-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <RefreshCw size={14} className="text-gray-400" />
                     </button>
@@ -136,10 +136,10 @@ export function SettingsPanel({
 
                   <button
                     onClick={() => onHistoricalModeChange(!historicalMode)}
-                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg border-2 transition-all ${
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all ${
                       historicalMode
-                        ? 'bg-crab-600 border-crab-500 text-white box-glow-red'
-                        : 'bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600'
+                        ? 'bg-crab-600 text-white box-glow-red'
+                        : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
                     }`}
                   >
                     {historicalMode ? 'Enabled' : 'Disabled'}
@@ -161,10 +161,10 @@ export function SettingsPanel({
 
                   <button
                     onClick={() => onDebugModeChange(!debugMode)}
-                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg border-2 transition-all ${
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all ${
                       debugMode
-                        ? 'bg-neon-lavender/30 border-neon-lavender/50 text-neon-lavender'
-                        : 'bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600'
+                        ? 'bg-neon-lavender/30 text-neon-lavender'
+                        : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
                     }`}
                   >
                     {debugMode ? 'Enabled' : 'Disabled'}
@@ -192,10 +192,10 @@ export function SettingsPanel({
 
                   <button
                     onClick={() => onLogCollectionChange(!logCollection)}
-                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg border-2 transition-all mb-2 ${
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg transition-all mb-2 ${
                       logCollection
-                        ? 'bg-neon-mint/20 border-neon-mint/50 text-neon-mint'
-                        : 'bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600'
+                        ? 'bg-neon-mint/20 text-neon-mint'
+                        : 'bg-shell-800 text-gray-400 hover:bg-shell-700'
                     }`}
                   >
                     {logCollection ? 'Recording...' : 'Start Recording'}
@@ -205,7 +205,7 @@ export function SettingsPanel({
                     <button
                       onClick={onDownloadLogs}
                       disabled={logCount === 0}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-shell-700 border-2 border-shell-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-shell-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Download size={12} />
                       Save
@@ -213,7 +213,7 @@ export function SettingsPanel({
                     <button
                       onClick={onClearLogs}
                       disabled={logCount === 0}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-crab-900/50 border-2 border-shell-700 hover:border-crab-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 font-display text-xs uppercase tracking-wide bg-shell-800 hover:bg-crab-900/50 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 size={12} />
                       Clear

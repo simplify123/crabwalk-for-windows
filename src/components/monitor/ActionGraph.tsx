@@ -600,7 +600,9 @@ function ActionGraphInner({
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#252535" gap={24} size={1} />
-        <Controls />
+        <Controls
+          className="bg-shell-900! border-shell-700! shadow-lg! [&>button]:bg-shell-800! [&>button]:border-shell-700! [&>button]:text-gray-300! [&>button:hover]:bg-shell-700! [&>button>svg]:fill-gray-300!"
+        />
         <MiniMap
           nodeColor={(node) => {
             if (node.type === 'crab') return '#ef4444'
@@ -609,6 +611,8 @@ function ActionGraphInner({
             return '#52526e'
           }}
           maskColor="rgba(10, 10, 15, 0.8)"
+          className="bg-shell-900! border-shell-700!"
+          style={{ backgroundColor: '#0a0a0f' }}
         />
       </ReactFlow>
     </div>

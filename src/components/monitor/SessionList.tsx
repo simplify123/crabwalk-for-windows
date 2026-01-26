@@ -72,7 +72,7 @@ export function SessionList({
 
   return (
     <motion.div
-      className="flex flex-col h-full bg-shell-900 border-r-2 border-shell-700 relative"
+      className="flex flex-col h-full bg-shell-900 relative"
       initial={false}
       animate={{ width: collapsed ? 56 : 288 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -81,7 +81,7 @@ export function SessionList({
       <div className="absolute inset-0 texture-scanlines pointer-events-none opacity-50" />
 
       {/* Header */}
-      <div className="relative p-3 border-b-2 border-shell-700 bg-shell-950/50">
+      <div className="relative p-3 bg-shell-950/50">
         <div className="flex items-center justify-between mb-3">
           {!collapsed && (
             <h2 className="font-mono uppercase text-sm text-crab-400 glow-red tracking-wider ml-1">
@@ -216,7 +216,7 @@ export function SessionList({
       </div>
 
       {/* Footer */}
-      <div className="relative p-2.5 border-t-2 border-shell-700 bg-shell-950/50">
+      <div className="relative p-2.5 bg-shell-950/50">
         <div
           className={`font-console text-xs text-shell-500 text-center flex items-center justify-center ${collapsed ? "flex-col gap-3" : "gap-4"}`}
         >

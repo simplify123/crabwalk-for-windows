@@ -159,7 +159,7 @@ export const ActionNode = memo(function ActionNode({
       {/* Header: Event type + state */}
       <div className="flex items-center gap-2 mb-1.5">
         <EventIcon size={12} className="text-shell-500" />
-        <span className="font-display text-[10px] font-medium text-gray-300 uppercase tracking-wide">
+        <span className="font-display text-xs font-medium text-gray-300 uppercase tracking-wide">
           {eventInfo.label}
         </span>
         <StateIcon
@@ -169,13 +169,13 @@ export const ActionNode = memo(function ActionNode({
       </div>
 
       {/* Timestamp */}
-      <div className="font-console text-[11px] text-shell-500 mb-1.5">
+      <div className="font-console text-xs text-shell-500 mb-1.5">
         <span className="text-crab-600">&gt;</span> {formatTime(data.timestamp)}
       </div>
 
       {/* Metadata for complete nodes */}
       {hasMetadata && (
-        <div className="font-console text-[10px] text-shell-400 mb-1.5 flex gap-2 flex-wrap">
+        <div className="font-console text-xs text-shell-400 mb-1.5 flex gap-2 flex-wrap">
           {data.duration && (
             <span className="text-neon-cyan">{formatDuration(data.duration)}</span>
           )}
@@ -197,24 +197,22 @@ export const ActionNode = memo(function ActionNode({
         </div>
       )}
 
-      {/* Content - truncated preview or full markdown */}
-      {expanded && fullContent ? (
-        <div className="prose prose-invert prose-sm max-w-none text-gray-300 overflow-auto max-h-[400px]
-          prose-headings:text-gray-200 prose-headings:font-display prose-headings:text-sm
-          prose-p:text-[12px] prose-p:leading-relaxed prose-p:my-1
-          prose-code:text-neon-cyan prose-code:bg-shell-950 prose-code:px-1 prose-code:rounded prose-code:text-[11px]
-          prose-pre:bg-shell-950 prose-pre:border prose-pre:border-shell-800 prose-pre:text-[11px]
+      {/* Content - markdown for both preview and expanded */}
+      {(expanded ? fullContent : truncatedContent) && (
+        <div className={`
+          prose prose-invert prose-sm max-w-none text-gray-300
+          prose-headings:text-gray-200 prose-headings:font-display prose-headings:text-sm prose-headings:my-1
+          prose-p:text-xs prose-p:leading-relaxed prose-p:my-1
+          prose-code:text-neon-cyan prose-code:bg-shell-950 prose-code:px-1 prose-code:rounded prose-code:text-xs
+          prose-pre:bg-shell-950 prose-pre:border prose-pre:border-shell-800 prose-pre:text-xs prose-pre:my-1
           prose-a:text-neon-lavender prose-a:no-underline hover:prose-a:underline
-          prose-li:text-[12px] prose-li:my-0.5
+          prose-li:text-xs prose-li:my-0.5
           prose-strong:text-gray-200
-        ">
-          <Markdown>{fullContent}</Markdown>
+          ${expanded ? 'overflow-auto max-h-[400px]' : 'overflow-hidden max-h-[60px]'}
+        `}>
+          <Markdown>{expanded ? fullContent! : truncatedContent!}</Markdown>
         </div>
-      ) : truncatedContent ? (
-        <div className="font-console text-[10px] text-gray-400 leading-relaxed whitespace-pre-wrap">
-          {truncatedContent}
-        </div>
-      ) : null}
+      )}
 
       {expanded && data.toolArgs != null && (
         <pre className="mt-2 font-console text-[11px] text-shell-500 bg-shell-950 p-2 rounded border border-shell-800 overflow-auto max-h-32">
