@@ -1,4 +1,6 @@
+// Client-safe exports (no Node.js dependencies)
 export * from './protocol'
 export * from './parser'
 export * from './collections'
-export { ClawdbotClient, getClawdbotClient, isChatEvent, isAgentEvent } from './client'
+
+// Server-only exports are in ./client.ts - import directly from there

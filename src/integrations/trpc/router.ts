@@ -2,8 +2,8 @@ import { initTRPC } from '@trpc/server'
 import { observable } from '@trpc/server/observable'
 import superjson from 'superjson'
 import { z } from 'zod'
+import { getClawdbotClient } from '~/integrations/clawdbot/client'
 import {
-  getClawdbotClient,
   parseEventFrame,
   sessionInfoToMonitor,
   type MonitorSession,
