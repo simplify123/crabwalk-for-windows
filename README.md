@@ -4,6 +4,10 @@ Real-time companion monitor for [Clawdbot](https://github.com/clawdbot/clawdbot)
 
 Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a live node graph. See thinking states, tool calls, and response chains as they happen.
 
+![Crabwalk Home](public/home.png)
+
+![Crabwalk Monitor](public/monitor.png)
+
 ## Features
 
 - **Live activity graph** - ReactFlow visualization of agent sessions and action chains
