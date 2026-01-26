@@ -11,23 +11,34 @@ const sizeClasses = {
   lg: 'w-4 h-4',
 }
 
-const statusColors = {
-  idle: 'bg-gray-500',
-  active: 'bg-green-500',
-  thinking: 'bg-yellow-500',
+const statusConfig = {
+  idle: {
+    color: 'bg-shell-600',
+    glow: 'none',
+  },
+  active: {
+    color: 'bg-neon-mint',
+    glow: '0 0 8px rgba(152, 255, 200, 0.6)',
+  },
+  thinking: {
+    color: 'bg-neon-peach',
+    glow: '0 0 8px rgba(255, 176, 136, 0.6)',
+  },
 }
 
 export function StatusIndicator({ status, size = 'md' }: StatusIndicatorProps) {
   const isPulsing = status === 'active' || status === 'thinking'
+  const config = statusConfig[status]
 
   return (
     <div className="relative flex items-center justify-center">
       <div
-        className={`rounded-full ${sizeClasses[size]} ${statusColors[status]}`}
+        className={`rounded-full ${sizeClasses[size]} ${config.color}`}
+        style={{ boxShadow: config.glow }}
       />
       {isPulsing && (
         <motion.div
-          className={`absolute rounded-full ${sizeClasses[size]} ${statusColors[status]}`}
+          className={`absolute rounded-full ${sizeClasses[size]} ${config.color}`}
           initial={{ opacity: 0.6, scale: 1 }}
           animate={{ opacity: 0, scale: 2.5 }}
           transition={{

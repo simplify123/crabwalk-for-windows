@@ -29,33 +29,43 @@ export const SessionNode = memo(function SessionNode({
       animate={{ opacity: 1, scale: 1 }}
       className={`
         px-4 py-3 rounded-lg border-2 min-w-[180px]
-        bg-gray-800 text-white shadow-lg
-        ${selected ? 'border-cyan-400' : 'border-gray-600'}
-        ${data.status === 'thinking' ? 'border-yellow-500' : ''}
+        bg-shell-900 text-white
+        ${selected ? 'border-crab-500' : 'border-shell-600'}
+        ${data.status === 'thinking' ? 'border-neon-peach' : ''}
+        transition-all duration-150 hover:bg-shell-800
       `}
+      style={{
+        boxShadow: selected
+          ? '0 0 20px rgba(239, 68, 68, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)'
+          : '0 4px 12px rgba(0, 0, 0, 0.3)',
+      }}
     >
-      <Handle type="target" position={Position.Top} className="bg-gray-500!" />
+      <Handle type="target" position={Position.Top} className="bg-crab-500! w-3! h-3! border-2! border-shell-900!" />
 
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-lg">{platformIcon}</span>
-        <span className="font-semibold text-sm capitalize">{data.platform}</span>
+        <span className="text-xl">{platformIcon}</span>
+        <span className="font-display text-xs font-semibold uppercase tracking-wide text-gray-200">
+          {data.platform}
+        </span>
         <StatusIndicator status={data.status} size="sm" />
       </div>
 
-      <div className="flex items-center gap-2 text-gray-300 text-xs">
+      <div className="flex items-center gap-2 mb-2">
         {data.isGroup ? (
-          <Users size={12} className="text-gray-400" />
+          <Users size={12} className="text-shell-500" />
         ) : (
-          <User size={12} className="text-gray-400" />
+          <User size={12} className="text-shell-500" />
         )}
-        <span className="truncate max-w-[120px]">{data.recipient}</span>
+        <span className="font-display text-[11px] text-gray-300 truncate max-w-[120px]">
+          {data.recipient}
+        </span>
       </div>
 
-      <div className="mt-2 text-[10px] text-gray-500 truncate">
-        {data.agentId}
+      <div className="font-console text-[9px] text-shell-500 truncate">
+        <span className="text-crab-600">&gt;</span> {data.agentId}
       </div>
 
-      <Handle type="source" position={Position.Bottom} className="bg-gray-500!" />
+      <Handle type="source" position={Position.Bottom} className="bg-crab-500! w-3! h-3! border-2! border-shell-900!" />
     </motion.div>
   )
 })

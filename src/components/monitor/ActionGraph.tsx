@@ -95,14 +95,14 @@ export function ActionGraph({
       ? sessions.filter((s) => s.key === selectedSession)
       : sessions
 
-    // Connect crab to each session
+    // Connect crab to each session - crab red color
     for (const session of visibleSessions) {
       edges.push({
         id: `e-crab-${session.key}`,
         source: CRAB_NODE_ID,
         target: `session-${session.key}`,
-        markerEnd: { type: MarkerType.ArrowClosed },
-        style: { stroke: '#06b6d4', strokeWidth: 2 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#ef4444' },
+        style: { stroke: '#ef4444', strokeWidth: 2 },
       })
     }
 
@@ -134,8 +134,8 @@ export function ActionGraph({
               source: sessionId,
               target: `action-${action.id}`,
               animated: action.type === 'delta',
-              markerEnd: { type: MarkerType.ArrowClosed },
-              style: { stroke: '#6b7280' },
+              markerEnd: { type: MarkerType.ArrowClosed, color: '#52526e' },
+              style: { stroke: '#52526e' },
             })
           }
         } else {
@@ -146,8 +146,8 @@ export function ActionGraph({
             source: `action-${prev.id}`,
             target: `action-${action.id}`,
             animated: action.type === 'delta',
-            markerEnd: { type: MarkerType.ArrowClosed },
-            style: { stroke: '#6b7280' },
+            markerEnd: { type: MarkerType.ArrowClosed, color: '#52526e' },
+            style: { stroke: '#52526e' },
           })
         }
       }
@@ -195,7 +195,7 @@ export function ActionGraph({
   )
 
   return (
-    <div className="w-full h-full bg-gray-950">
+    <div className="w-full h-full bg-shell-950 texture-grid">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -209,15 +209,15 @@ export function ActionGraph({
         maxZoom={2}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#374151" gap={20} />
-        <Controls className="bg-gray-800! !border-gray-700! rounded-lg!" />
+        <Background color="#252535" gap={24} size={1} />
+        <Controls />
         <MiniMap
-          className="bg-gray-800! border-gray-700! rounded-lg!"
           nodeColor={(node) => {
-            if (node.type === 'crab') return '#f97316' // orange for crab
-            if (node.type === 'session') return '#06b6d4'
-            return '#6b7280'
+            if (node.type === 'crab') return '#ef4444' // crab red
+            if (node.type === 'session') return '#98ffc8' // neon mint
+            return '#52526e' // shell
           }}
+          maskColor="rgba(10, 10, 15, 0.8)"
         />
       </ReactFlow>
     </div>

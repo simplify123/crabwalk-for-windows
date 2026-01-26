@@ -25,62 +25,74 @@ export function SettingsPanel({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700 transition-colors"
+        className="p-2.5 bg-shell-800 hover:bg-shell-700 rounded-lg border-2 border-shell-700 hover:border-shell-600 transition-all group"
       >
-        <Settings size={18} className="text-gray-300" />
+        <Settings size={16} className="text-gray-400 group-hover:text-crab-400 transition-colors" />
       </button>
 
       <AnimatePresence>
         {open && (
           <>
+            {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 bg-black/50 z-40"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
             />
+
+            {/* Panel */}
             <motion.div
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
-              className="fixed right-0 top-0 h-full w-80 bg-gray-900 border-l border-gray-700 z-50 p-4"
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 h-full w-80 bg-shell-900 border-l-2 border-shell-700 z-50 p-5 overflow-y-auto"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold">Settings</h2>
+              {/* Texture overlay */}
+              <div className="absolute inset-0 texture-scanlines pointer-events-none opacity-30" />
+
+              {/* Header */}
+              <div className="relative flex items-center justify-between mb-8">
+                <h2 className="font-arcade text-sm text-crab-400 glow-red tracking-wider">
+                  SETTINGS
+                </h2>
                 <button
                   onClick={() => setOpen(false)}
-                  className="p-1 hover:bg-gray-800 rounded"
+                  className="p-2 hover:bg-shell-800 rounded-lg border border-transparent hover:border-shell-600 transition-all"
                 >
-                  <X size={18} />
+                  <X size={18} className="text-gray-400" />
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div className="relative space-y-6">
                 {/* Connection status */}
-                <div className="p-3 bg-gray-800 rounded-lg">
-                  <div className="flex items-center gap-2 mb-3">
+                <div className="panel-retro p-4">
+                  <div className="flex items-center gap-3 mb-4">
                     {connected ? (
-                      <Wifi size={16} className="text-green-400" />
+                      <Wifi size={18} className="text-neon-mint" />
                     ) : (
-                      <WifiOff size={16} className="text-red-400" />
+                      <WifiOff size={18} className="text-crab-400" />
                     )}
-                    <span className="text-sm font-medium">
+                    <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
                       {connected ? 'Connected' : 'Disconnected'}
                     </span>
                   </div>
+
                   <div className="flex gap-2">
                     {connected ? (
                       <button
                         onClick={onDisconnect}
-                        className="flex-1 px-3 py-1.5 text-sm bg-red-600 hover:bg-red-500 rounded"
+                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-crab-600 hover:bg-crab-500 border-2 border-crab-500 rounded-lg transition-all"
+                        style={{ boxShadow: '0 2px 0 0 #991b1b' }}
                       >
                         Disconnect
                       </button>
                     ) : (
                       <button
                         onClick={onConnect}
-                        className="flex-1 px-3 py-1.5 text-sm bg-green-600 hover:bg-green-500 rounded"
+                        className="flex-1 px-4 py-2 font-display text-xs uppercase tracking-wide bg-neon-mint/20 hover:bg-neon-mint/30 border-2 border-neon-mint/50 text-neon-mint rounded-lg transition-all"
                       >
                         Connect
                       </button>
@@ -88,42 +100,67 @@ export function SettingsPanel({
                     <button
                       onClick={onRefresh}
                       disabled={!connected}
-                      className="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-2 bg-shell-800 hover:bg-shell-700 border-2 border-shell-700 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      <RefreshCw size={14} />
+                      <RefreshCw size={14} className="text-gray-400" />
                     </button>
                   </div>
                 </div>
 
                 {/* Historical mode toggle */}
-                <div className="p-3 bg-gray-800 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <History size={16} className="text-gray-400" />
-                    <span className="text-sm font-medium">Historical Mode</span>
+                <div className="panel-retro p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <History size={18} className="text-shell-500" />
+                    <span className="font-display text-sm font-medium text-gray-200 uppercase tracking-wide">
+                      Historical Mode
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-400 mb-3">
-                    Load past sessions on connect
+
+                  <p className="font-console text-[10px] text-shell-500 mb-4">
+                    <span className="text-crab-600">&gt;</span> load past sessions on connect
                   </p>
+
                   <button
                     onClick={() => onHistoricalModeChange(!historicalMode)}
-                    className={`w-full px-3 py-1.5 text-sm rounded transition-colors ${
+                    className={`w-full px-4 py-2 font-display text-xs uppercase tracking-wide rounded-lg border-2 transition-all ${
                       historicalMode
-                        ? 'bg-cyan-600 hover:bg-cyan-500'
-                        : 'bg-gray-700 hover:bg-gray-600'
+                        ? 'bg-crab-600 border-crab-500 text-white box-glow-red'
+                        : 'bg-shell-800 border-shell-700 text-gray-400 hover:border-shell-600'
                     }`}
                   >
                     {historicalMode ? 'Enabled' : 'Disabled'}
                   </button>
                 </div>
 
-                {/* Info */}
-                <div className="text-xs text-gray-500 p-3 bg-gray-800/50 rounded-lg">
-                  <p className="mb-2">
-                    <strong>Gateway:</strong> ws://127.0.0.1:18789
-                  </p>
-                  <p>
-                    <strong>Protocol:</strong> v3
-                  </p>
+                {/* Info panel */}
+                <div className="panel-retro p-4 bg-shell-950/50">
+                  <h3 className="font-display text-xs text-gray-400 uppercase tracking-wide mb-3">
+                    <span className="text-crab-600">❮</span> Gateway Info <span className="text-crab-600">❯</span>
+                  </h3>
+
+                  <div className="font-console text-[10px] text-shell-500 space-y-1.5">
+                    <div>
+                      <span className="text-crab-600">&gt;</span> endpoint: ws://127.0.0.1:18789
+                    </div>
+                    <div>
+                      <span className="text-crab-600">&gt;</span> protocol: v3
+                    </div>
+                    <div>
+                      <span className="text-crab-600">&gt;</span> status: {connected ? (
+                        <span className="text-neon-mint">online</span>
+                      ) : (
+                        <span className="text-crab-400">offline</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Version badge */}
+                <div className="flex items-center justify-center gap-2 pt-4">
+                  <span className="w-2 h-2 rounded-full bg-neon-mint animate-pulse" />
+                  <span className="font-console text-[10px] text-shell-500">
+                    crabwalk v3.0
+                  </span>
                 </div>
               </div>
             </motion.div>

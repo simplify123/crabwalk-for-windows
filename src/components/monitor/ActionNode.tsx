@@ -29,45 +29,52 @@ const stateConfig: Record<
   MonitorAction['type'],
   {
     icon: typeof Loader2
-    color: string
+    borderColor: string
+    bgColor: string
     iconColor: string
     animate: boolean
   }
 > = {
   delta: {
     icon: Loader2,
-    color: 'border-blue-500 bg-blue-500/10',
-    iconColor: 'text-blue-400',
+    borderColor: 'border-neon-cyan',
+    bgColor: 'bg-neon-cyan/10',
+    iconColor: 'text-neon-cyan',
     animate: true,
   },
   final: {
     icon: CheckCircle,
-    color: 'border-green-500 bg-green-500/10',
-    iconColor: 'text-green-400',
+    borderColor: 'border-neon-mint',
+    bgColor: 'bg-neon-mint/10',
+    iconColor: 'text-neon-mint',
     animate: false,
   },
   aborted: {
     icon: XCircle,
-    color: 'border-orange-500 bg-orange-500/10',
-    iconColor: 'text-orange-400',
+    borderColor: 'border-neon-peach',
+    bgColor: 'bg-neon-peach/10',
+    iconColor: 'text-neon-peach',
     animate: false,
   },
   error: {
     icon: XCircle,
-    color: 'border-red-500 bg-red-500/10',
-    iconColor: 'text-red-400',
+    borderColor: 'border-crab-500',
+    bgColor: 'bg-crab-500/10',
+    iconColor: 'text-crab-400',
     animate: false,
   },
   tool_call: {
     icon: Wrench,
-    color: 'border-purple-500 bg-purple-500/10',
-    iconColor: 'text-purple-400',
+    borderColor: 'border-neon-lavender',
+    bgColor: 'bg-neon-lavender/10',
+    iconColor: 'text-neon-lavender',
     animate: false,
   },
   tool_result: {
     icon: MessageSquare,
-    color: 'border-cyan-500 bg-cyan-500/10',
-    iconColor: 'text-cyan-400',
+    borderColor: 'border-pastel-sky',
+    bgColor: 'bg-pastel-sky/10',
+    iconColor: 'text-pastel-sky',
     animate: false,
   },
 }
@@ -110,18 +117,22 @@ export const ActionNode = memo(function ActionNode({
       transition={{ duration: 0.2 }}
       onClick={() => setExpanded(!expanded)}
       className={`
-        px-3 py-2 rounded-md border min-w-[180px] max-w-[300px] cursor-pointer
-        ${state.color}
-        ${selected ? 'ring-2 ring-white/50' : ''}
+        px-3 py-2.5 rounded-lg border-2 min-w-[180px] max-w-[300px] cursor-pointer
+        bg-shell-900 ${state.borderColor}
+        ${selected ? 'ring-2 ring-white/30' : ''}
+        transition-all duration-150 hover:bg-shell-800
       `}
+      style={{
+        boxShadow: selected ? '0 0 15px rgba(239, 68, 68, 0.3)' : '0 4px 12px rgba(0, 0, 0, 0.3)',
+      }}
     >
-      <Handle type="target" position={Position.Top} className="bg-gray-500! w-2! h-2!" />
+      <Handle type="target" position={Position.Top} className="bg-shell-600! w-2! h-2! border-shell-800!" />
 
       {/* Header: Event type + state */}
-      <div className="flex items-center gap-2 mb-1">
-        <EventIcon size={14} className="text-gray-400" />
-        <span className="text-xs font-medium text-gray-200">
-          {eventInfo.label} Event
+      <div className="flex items-center gap-2 mb-1.5">
+        <EventIcon size={12} className="text-shell-500" />
+        <span className="font-display text-[10px] font-medium text-gray-300 uppercase tracking-wide">
+          {eventInfo.label}
         </span>
         <StateIcon
           size={12}
@@ -130,29 +141,29 @@ export const ActionNode = memo(function ActionNode({
       </div>
 
       {/* Timestamp */}
-      <div className="text-[10px] text-gray-500 mb-1">
-        {formatTime(data.timestamp)}
+      <div className="font-console text-[9px] text-shell-500 mb-1.5">
+        <span className="text-crab-600">&gt;</span> {formatTime(data.timestamp)}
       </div>
 
       {data.toolName && (
-        <div className="text-xs text-purple-300 mb-1 font-mono">
-          🔧 {data.toolName}
+        <div className="font-console text-[10px] text-neon-lavender mb-1.5">
+          <span className="text-shell-500">tool:</span> {data.toolName}
         </div>
       )}
 
       {truncatedContent && (
-        <div className="text-[11px] text-gray-300 leading-tight whitespace-pre-wrap">
+        <div className="font-console text-[10px] text-gray-400 leading-relaxed whitespace-pre-wrap">
           {expanded ? fullContent : truncatedContent}
         </div>
       )}
 
       {expanded && data.toolArgs != null && (
-        <pre className="mt-2 text-[10px] text-gray-400 bg-black/30 p-1 rounded overflow-auto max-h-32">
+        <pre className="mt-2 font-console text-[9px] text-shell-500 bg-shell-950 p-2 rounded border border-shell-800 overflow-auto max-h-32">
           {JSON.stringify(data.toolArgs, null, 2) as string}
         </pre>
       )}
 
-      <Handle type="source" position={Position.Bottom} className="bg-gray-500! w-2! h-2!" />
+      <Handle type="source" position={Position.Bottom} className="bg-shell-600! w-2! h-2! border-shell-800!" />
     </motion.div>
   )
 })

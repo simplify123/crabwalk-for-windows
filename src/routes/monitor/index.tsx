@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useLiveQuery } from '@tanstack/react-db'
-import { Activity, ArrowLeft, Loader2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { trpc } from '~/integrations/trpc/client'
 import {
   sessionsCollection,
@@ -22,6 +23,21 @@ export const Route = createFileRoute('/monitor/')({
   component: MonitorPageWrapper,
 })
 
+// Crab logo for header
+function CrabLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 60" className={className} fill="currentColor">
+      <ellipse cx="50" cy="35" rx="25" ry="18" />
+      <path d="M15 30 Q5 25 8 18 Q12 12 20 15 Q25 18 25 25 Q22 30 15 30Z" />
+      <circle cx="8" cy="15" r="5" />
+      <path d="M85 30 Q95 25 92 18 Q88 12 80 15 Q75 18 75 25 Q78 30 85 30Z" />
+      <circle cx="92" cy="15" r="5" />
+      <circle cx="42" cy="25" r="4" fill="#0a0a0f" />
+      <circle cx="58" cy="25" r="4" fill="#0a0a0f" />
+    </svg>
+  )
+}
+
 // Wrapper to ensure client-only rendering (useLiveQuery needs client)
 function MonitorPageWrapper() {
   const [mounted, setMounted] = useState(false)
@@ -29,11 +45,25 @@ function MonitorPageWrapper() {
 
   if (!mounted) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-950 text-white">
-        <div className="flex items-center gap-3">
-          <Loader2 size={24} className="animate-spin text-cyan-400" />
-          <span className="text-lg">Loading monitor...</span>
-        </div>
+      <div className="h-screen flex items-center justify-center bg-shell-950 text-white">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          >
+            <CrabLogo className="w-16 h-16 text-crab-500 crab-icon-glow" />
+          </motion.div>
+          <div className="flex items-center gap-3">
+            <Loader2 size={18} className="animate-spin text-crab-400" />
+            <span className="font-display text-sm text-gray-400 tracking-wide uppercase">
+              Loading Monitor...
+            </span>
+          </div>
+        </motion.div>
       </div>
     )
   }
@@ -163,38 +193,63 @@ function MonitorPage() {
   }, [connected])
 
   return (
-    <div className="h-screen flex flex-col bg-gray-950 text-white">
+    <div className="h-screen flex flex-col bg-shell-950 text-white overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-gray-900 border-b border-gray-800">
-        <div className="flex items-center gap-4">
+      <header className="flex items-center justify-between px-4 py-3 bg-shell-900 border-b-2 border-shell-700 relative">
+        {/* Gradient accent */}
+        <div className="absolute inset-0 bg-linear-to-r from-crab-950/20 via-transparent to-transparent pointer-events-none" />
+
+        <div className="relative flex items-center gap-4">
           <Link
             to="/"
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-shell-800 rounded-lg transition-all border border-transparent hover:border-shell-600 group"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={18} className="text-gray-400 group-hover:text-crab-400" />
           </Link>
-          <div className="flex items-center gap-2">
-            <Activity size={20} className="text-cyan-400" />
-            <h1 className="text-lg font-semibold">Clawdbot Monitor</h1>
+
+          <div className="flex items-center gap-3">
+            <CrabLogo className="w-7 h-7 text-crab-500 crab-icon-glow" />
+            <h1 className="font-arcade text-xs text-crab-400 glow-red tracking-wider">
+              MONITOR
+            </h1>
           </div>
+
           <StatusIndicator status={connected ? 'active' : 'idle'} />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="relative flex items-center gap-4">
           {connecting && (
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Loader2 size={14} className="animate-spin" />
-              Connecting...
-            </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center gap-2"
+            >
+              <Loader2 size={14} className="animate-spin text-crab-400" />
+              <span className="font-console text-xs text-shell-500">
+                connecting...
+              </span>
+            </motion.div>
           )}
+
           {error && (
-            <div className="text-sm text-red-400 max-w-xs truncate">
-              {error}
+            <div className="font-console text-xs text-crab-400 max-w-xs truncate">
+              <span className="text-crab-600">&gt;</span> error: {error}
             </div>
           )}
-          <div className="text-sm text-gray-500">
-            {sessions.length} sessions | {actions.length} actions
+
+          {/* Stats display */}
+          <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-shell-800/50 border border-shell-700 rounded-lg">
+            <div className="flex items-center gap-2">
+              <span className="font-console text-[10px] text-shell-500 uppercase">Sessions</span>
+              <span className="font-display text-sm text-neon-mint">{sessions.length}</span>
+            </div>
+            <div className="w-px h-4 bg-shell-700" />
+            <div className="flex items-center gap-2">
+              <span className="font-console text-[10px] text-shell-500 uppercase">Actions</span>
+              <span className="font-display text-sm text-neon-peach">{actions.length}</span>
+            </div>
           </div>
+
           <SettingsPanel
             connected={connected}
             historicalMode={historicalMode}
@@ -209,7 +264,7 @@ function MonitorPage() {
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <div className="w-64 flex shrink-0">
+        <div className="w-72 flex shrink-0">
           <SessionList
             sessions={sessions}
             selectedKey={selectedSession}
@@ -218,7 +273,7 @@ function MonitorPage() {
         </div>
 
         {/* Graph area */}
-        <div className="flex-1">
+        <div className="flex-1 relative">
           <ActionGraph
             sessions={sessions}
             actions={actions}
