@@ -241,8 +241,9 @@ let clientInstance: ClawdbotClient | null = null
 
 export function getClawdbotClient(): ClawdbotClient {
   if (!clientInstance) {
+    const url = process.env.CLAWDBOT_URL || 'ws://127.0.0.1:18789'
     const token = process.env.CLAWDBOT_API_TOKEN
-    clientInstance = new ClawdbotClient('ws://127.0.0.1:18789', token)
+    clientInstance = new ClawdbotClient(url, token)
   }
   return clientInstance
 }
