@@ -24,14 +24,18 @@ Watch your AI agents work across WhatsApp, Telegram, Discord, and Slack in a liv
 docker run -d \
   -p 3000:3000 \
   -e CLAWDBOT_API_TOKEN=your-token \
+  -e CLAWDBOT_URL=ws://host.docker.internal:18789 \
   ghcr.io/luccast/crabwalk:latest
 ```
+
+> Note: When running Crabwalk in Docker, the Clawdbot gateway typically runs on the *host*.
+> Use `CLAWDBOT_URL=ws://host.docker.internal:18789` so the container can connect.
 
 Or with docker-compose:
 
 ```bash
 curl -O https://raw.githubusercontent.com/luccast/crabwalk/master/docker-compose.yml
-CLAWDBOT_API_TOKEN=your-token docker-compose up -d
+CLAWDBOT_API_TOKEN=your-token CLAWDBOT_URL=ws://host.docker.internal:18789 docker-compose up -d
 ```
 
 ### From source
@@ -54,13 +58,14 @@ Requires clawdbot gateway running on the same machine.
 Find your token in the clawdbot config file:
 
 ```bash
-cat ~/.clawdbot/clawdbot.json | grep api_token
+# Look for gateway.auth.token
+cat ~/.clawdbot/clawdbot.json | rg "gateway\.auth\.token"
 ```
 
 Or copy it directly:
 
 ```bash
-export CLAWDBOT_API_TOKEN=$(cat ~/.clawdbot/clawdbot.json | grep -o '"api_token": *"[^"]*"' | cut -d'"' -f4)
+export CLAWDBOT_API_TOKEN=$(python3 -c "import json,os; print(json.load(open(os.path.expanduser('~/.clawdbot/clawdbot.json')))['gateway']['auth']['token'])")
 ```
 
 ## Stack
