@@ -63,9 +63,14 @@ export function layoutGraph(
   const isHorizontal = direction === 'LR' || direction === 'RL'
 
   // Build session hierarchy and columns
-  const sessions = nodes
+  const allSessions = nodes
     .filter((n) => n.type === 'session')
     .map((n) => n.data as unknown as MonitorSession)
+
+  // Filter out orphan subagents (sessions with spawnedBy pointing to non-existent parent)
+  const sessions = allSessions.filter(s =>
+    !s.spawnedBy || allSessions.some(p => p.key === s.spawnedBy)
+  )
 
   const actions = nodes
     .filter((n) => n.type === 'action')
