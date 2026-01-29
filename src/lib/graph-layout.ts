@@ -67,10 +67,16 @@ export function layoutGraph(
     .filter((n) => n.type === 'session')
     .map((n) => n.data as unknown as MonitorSession)
 
-  // Filter out orphan subagents (sessions with spawnedBy pointing to non-existent parent)
-  const sessions = allSessions.filter(s =>
-    !s.spawnedBy || allSessions.some(p => p.key === s.spawnedBy)
-  )
+  // Filter out orphan subagents:
+  // - Subagent sessions (by key) must have a valid parent in the list
+  // - Non-subagents are shown if they have no parent or a valid parent
+  const sessions = allSessions.filter(s => {
+    const isSubagent = s.key.includes('subagent')
+    if (isSubagent) {
+      return s.spawnedBy && allSessions.some(p => p.key === s.spawnedBy)
+    }
+    return !s.spawnedBy || allSessions.some(p => p.key === s.spawnedBy)
+  })
 
   const actions = nodes
     .filter((n) => n.type === 'action')
