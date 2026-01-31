@@ -30,10 +30,15 @@ export function validatePath(workspaceRoot: string, targetPath: string): string 
   const resolvedRoot = path.resolve(workspaceRoot)
   const resolvedTarget = path.resolve(targetPath)
 
+  // Normalize paths for cross-platform comparison
+  // Convert backslashes to forward slashes and ensure consistent formatting
+  const normalizeForComparison = (p: string) => p.replace(/\\/g, '/').replace(/\/$/, '')
+  const normalizedRoot = normalizeForComparison(resolvedRoot) + '/'
+  const normalizedTarget = normalizeForComparison(resolvedTarget)
+
   // Ensure target path is within root path by checking with trailing separator
   // This prevents bypasses like /home/user/workspace-evil matching /home/user/workspace
-  const normalizedRoot = resolvedRoot.endsWith(path.sep) ? resolvedRoot : resolvedRoot + path.sep
-  if (!resolvedTarget.startsWith(normalizedRoot) && resolvedTarget !== resolvedRoot) {
+  if (!normalizedTarget.startsWith(normalizedRoot) && normalizedTarget !== normalizeForComparison(resolvedRoot)) {
     throw new Error('Path traversal detected: target path is outside workspace root')
   }
 
@@ -212,6 +217,10 @@ export function isTextFile(filename: string): boolean {
     '.gitignore',
     '.dockerignore',
   ]
-  const ext = path.extname(filename).toLowerCase()
-  return textExtensions.includes(ext) || !ext.includes('.')
+  // Get extension - handle files starting with dot (like .gitignore)
+  // path.extname returns '' for files like 'Makefile' and '.gitignore'
+  // We need to distinguish between extensionless files and dotfiles
+  const lastDotIndex = filename.lastIndexOf('.')
+  const ext = lastDotIndex > 0 ? path.extname(filename).toLowerCase() : ''
+  return textExtensions.includes(ext) || ext === ''
 }

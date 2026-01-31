@@ -14,6 +14,19 @@ import { FileTree, MarkdownViewer } from '~/components/workspace'
 import { CrabIdleAnimation } from '~/components/ani'
 import type { DirectoryEntry } from '~/lib/workspace-fs'
 
+// Get parent directory path using path separator logic
+// Works cross-platform for both / and \ separators
+function getParentDirPath(filePath: string): string {
+  // Normalize to forward slashes for consistent processing
+  const normalized = filePath.replace(/\\/g, '/')
+  const lastSlashIndex = normalized.lastIndexOf('/')
+  if (lastSlashIndex <= 0) {
+    return filePath
+  }
+  // Return the original path up to the last separator
+  return filePath.substring(0, lastSlashIndex)
+}
+
 export const Route = createFileRoute('/workspace/')({
   component: WorkspacePageWrapper,
 })
@@ -184,7 +197,7 @@ function WorkspacePage() {
           setSelectedFileContent(result.content)
           setSelectedFileName(result.name)
           // Get file metadata from the parent directory entry if available
-          const parentDir = pathCache.get(selectedPath?.substring(0, selectedPath.lastIndexOf('/')) || workspacePath)
+          const parentDir = pathCache.get(getParentDirPath(filePath) || workspacePath)
           const fileEntry = parentDir?.find(e => e.path === filePath)
           setSelectedFileSize(fileEntry?.size)
           setSelectedFileModified(fileEntry?.modifiedAt)
