@@ -144,23 +144,20 @@ Requires OpenClaw gateway running on the same machine.
 
 ### Gateway Token
 
-Find your token in the openclaw config file:
+The CLI auto-detects your token from `~/.openclaw/openclaw.json` (at `gateway.auth.token`). No manual config needed for local setups.
 
-```bash
-# Look for gateway.auth.token
-cat ~/.openclaw/openclaw.json | rg "gateway\.auth\.token"
-```
-
-Or with jq:
+To find your token manually:
 
 ```bash
 jq '.gateway.auth.token' ~/.openclaw/openclaw.json
 ```
 
-Or copy it directly:
+Or set it explicitly:
 
 ```bash
-export CLAWDBOT_API_TOKEN=$(python3 -c "import json,os; print(json.load(open(os.path.expanduser('~/.openclaw/openclaw.json')))['gateway']['auth']['token'])")
+crabwalk -t your-token
+# or
+export CLAWDBOT_API_TOKEN=your-token
 ```
 
 ## Stack
