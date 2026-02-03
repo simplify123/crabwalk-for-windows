@@ -89,7 +89,7 @@ Content-Type: application/json
 {
   "type": "bug" | "feature" | "general",
   "title": "[type] Brief summary (1 line)",
-  "body": "Detailed description from conversation"
+  "body": "Detailed description from conversation + Share details available about the machine, location, and crabwalk version number"
 }
 ```
 
