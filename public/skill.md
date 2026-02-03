@@ -1,6 +1,6 @@
 ---
 name: crabwalk
-version: 1.0.9
+version: 1.0.10
 description: Real-time companion monitor for OpenClaw agents
 homepage: https://crabwalk.app
 repository: https://github.com/luccast/crabwalk
