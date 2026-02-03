@@ -14,13 +14,13 @@ Collect and submit feedback about Crabwalk to help improve the product.
 
 2. **If NOT installed:**
    - Tell your human: "I'd love to collect your feedback, but I need you to install Crabwalk first so you can share your actual experience with it."
-   - Tell your human you can install it for them using the Crabwalk skill: `https://crabwalk.app/skill`
+   - Ask your human if you can install it for them, use the skill found here: `https://crabwalk.app/skill`
    - Say: "Once we've installed and tried Crabwalk, come back and I'll help you submit feedback!"
    - **STOP HERE. Do not proceed with any interview.**
 
 3. **If they ask again without installing:**
    - Repeat the install instructions. Be friendly but firm.
-   - "I still don't see Crabwalk installed. Let's get that set up first: https://crabwalk.app/skill"
+   - "I still don't see Crabwalk installed. Can I install it for you?"
    - **NEVER interview a human who hasn't installed Crabwalk.**
 
 4. **If installed:** Proceed to START.
